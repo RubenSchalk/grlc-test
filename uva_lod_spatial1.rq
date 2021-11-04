@@ -1,0 +1,35 @@
+#+ description: Retrieves polygons of print location of maps
+#+     Uses polygons from gemeentegeschiedenis and connects these to location labels of uva lod (only for maps atm)
+#+     Quite demanding query on server, but works for limit 10
+
+
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX schema: <http://schema.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX gg: <http://www.gemeentegeschiedenis.nl/gg-schema#>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+
+SELECT (count(distinct(?work)) as ?n) ?wkt WHERE {
+  {
+  ?work a <http://schema.org/Map>.
+  ?work dc:date ?date .
+  ?work dct:spatial ?spatial .
+  ?spatial skos:prefLabel ?label_lod .
+}
+
+  service <https://api.druid.datalegend.net/datasets/nlgis/gemeentegeschiedenis/services/gemeentegeschiedenis/sparql> {
+  
+    ?sub gg:name ?label .
+    ?sub geo:hasGeometry [gg:year ?max ;
+                                    geo:asWKT ?wkt ] .
+      BIND(xsd:string(?label) as ?label2)
+    }
+    FILTER(?label_lod = ?label2)
+  }
+    
+ limit 10
