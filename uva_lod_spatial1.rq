@@ -1,8 +1,3 @@
-#+ description: Retrieves polygons of print location of maps
-#+     Uses polygons from gemeentegeschiedenis and connects these to location labels of uva lod (only for maps atm)
-#+     Quite demanding query on server, but works for limit 10
-
-
 PREFIX geo: <http://www.opengis.net/ont/geosparql#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
@@ -13,8 +8,7 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX gg: <http://www.gemeentegeschiedenis.nl/gg-schema#>
 
-
-SELECT (count(distinct(?work)) as ?n) ?wkt WHERE {
+SELECT (count(distinct(?work)) as ?n) ?label_lod ?wkt WHERE {
   {
   ?work a <http://schema.org/Map>.
   ?work dc:date ?date .
@@ -31,5 +25,5 @@ SELECT (count(distinct(?work)) as ?n) ?wkt WHERE {
     }
     FILTER(?label_lod = ?label2)
   }
-    
- limit 10
+    # to add: legend
+ #limit 10
