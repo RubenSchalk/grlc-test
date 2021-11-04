@@ -1,0 +1,31 @@
+#+ description: Retrieves number of works in collection by year and type
+#+     lod
+#+     uva
+#+
+#+     service API: https://api.lod.uba.uva.nl/datasets/UB-UVA/Catalogue/services/virtuoso/sparql
+
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX schema: <http://schema.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?year ?type (count(distinct(?work)) as ?n) WHERE {
+  
+  #?work a <http://schema.org/Manuscript>.
+  ?work dc:date ?date .
+  ?work rdf:type ?type .
+ 
+  
+  FILTER(REGEX(?date, "[0-9]$") && !REGEX(?date, "[a-z]"))
+  BIND((xsd:int((?date))) as ?year )
+  FILTER(?year <= "2000"^^xsd:int && ?year > "300"^^xsd:int)  
+  FILTER(!REGEX(?type, "europeana"))
+  FILTER(?type != <http://purl.org/dc/dcmitype/PhysicalObject>)
+ 
+} 
+#ORDER BY ASC (?year)
+GROUP BY  ?year ?type
+#ORDER BY ASC (?year ?type)
+#LIMIT 10
