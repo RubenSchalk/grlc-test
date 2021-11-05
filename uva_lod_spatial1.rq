@@ -1,3 +1,6 @@
+#+ description: Connects placenames on maps collection UvA to Gemeentegeschiedenis polygons
+#+     Note: nested query with counts and legend does not work because of server timeout (due to the memory intensive label matching)
+
 PREFIX geo: <http://www.opengis.net/ont/geosparql#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
@@ -8,7 +11,7 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX gg: <http://www.gemeentegeschiedenis.nl/gg-schema#>
 
-SELECT (count(distinct(?work)) as ?n) ?label_lod ?wkt ?mapEndpoint WHERE {
+SELECT (count((?label_lod)) as ?n) ?label_lod ?wkt ?wktTooltip ?mapEndpoint WHERE {
   {
   ?work a <http://schema.org/Map>.
   ?work dc:date ?date .
@@ -25,6 +28,7 @@ SELECT (count(distinct(?work)) as ?n) ?label_lod ?wkt ?mapEndpoint WHERE {
     }
     FILTER(?label_lod = ?label2)
     BIND("https://mapwarper.net/maps/wms/38227?request=GetCapabilities&service=WMS&version=1.1.1" as ?mapEndpoint)
+    BIND(STRAFTER(STR(?sub), 'gemeentenaam/') as ?wktTooltip)
   }
-    # to add: legend
+    # to add: legend with colors (doesn't work server timeout)
  #limit 10
