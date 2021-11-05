@@ -1,8 +1,7 @@
 #+ description: Retrieves number of works in collection by year and type
 #+     lod
 #+     uva
-#+
-#+     service API: https://api.lod.uba.uva.nl/datasets/UB-UVA/Catalogue/services/virtuoso/sparql
+#+     endpoint: https://api.lod.uba.uva.nl/datasets/UB-UVA/Catalogue/services/virtuoso/sparql
 
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX dc: <http://purl.org/dc/elements/1.1/>
