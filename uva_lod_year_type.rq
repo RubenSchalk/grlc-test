@@ -3,6 +3,11 @@
 #+     uva
 #+     - endpoint: https://api.lod.uba.uva.nl/datasets/UB-UVA/Catalogue/services/virtuoso/sparql
 
+#+ description: Retrieves number of works in collection by year and type
+#+     lod
+#+     uva
+#+     - endpoint: https://api.lod.uba.uva.nl/datasets/UB-UVA/Catalogue/services/virtuoso/sparql
+
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX dc: <http://purl.org/dc/elements/1.1/>
 PREFIX dct: <http://purl.org/dc/terms/>
@@ -10,9 +15,9 @@ PREFIX schema: <http://schema.org/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT ?year ?type (count(distinct(?work)) as ?n) WHERE {
+SELECT ?year (count(distinct(?work)) as ?n) WHERE {
   
-  #?work a <http://schema.org/Manuscript>.
+  ?work a <http://schema.org/Manuscript>.
   ?work dc:date ?date .
   ?work rdf:type ?type .
  
