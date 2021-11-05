@@ -8,7 +8,7 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX gg: <http://www.gemeentegeschiedenis.nl/gg-schema#>
 
-SELECT (count(distinct(?work)) as ?n) ?label_lod ?wkt WHERE {
+SELECT (count(distinct(?work)) as ?n) ?label_lod ?wkt ?mapEndpoint WHERE {
   {
   ?work a <http://schema.org/Map>.
   ?work dc:date ?date .
@@ -24,6 +24,7 @@ SELECT (count(distinct(?work)) as ?n) ?label_lod ?wkt WHERE {
       BIND(xsd:string(?label) as ?label2)
     }
     FILTER(?label_lod = ?label2)
+    BIND("https://mapwarper.net/maps/wms/38227?request=GetCapabilities&service=WMS&version=1.1.1" as ?mapEndpoint)
   }
     # to add: legend
  #limit 10
