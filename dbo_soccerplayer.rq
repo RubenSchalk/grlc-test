@@ -1,0 +1,36 @@
+#+ endpoint: https://api.druid.datalegend.net/datasets/RubenS/kerouac-vde/services/kerouac-vde/sparql
+#+ description: soccer players who were born in a country with more than 10 million inhabitants, who played as 
+#+  goalkeeper for a club that has a stadium with more than 30,000 seats, and whose club country is/was different from their birth country
+#+ source: https://www.dbpedia.org/resources/sparql/
+
+
+PREFIX dbp: <http://dbpedia.org/property/>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbpedia2: <http://dbpedia.org/property/>
+PREFIX dbpedia: <http://dbpedia.org/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
+
+
+SELECT distinct ?soccerplayer ?countryOfBirth ?team ?countryOfTeam ?stadiumcapacity WHERE {
+service <https://dbpedia.org/sparql> {
+
+?soccerplayer a dbo:SoccerPlayer  ;
+   dbo:position|dbpedia2:position <http://dbpedia.org/resource/Goalkeeper_(association_football)> ;
+   dbo:birthPlace/dbo:country* ?countryOfBirth ;
+   #dbo:number 13 ;
+   dbo:team ?team .
+   ?team dbo:capacity ?stadiumcapacity ; dbo:ground ?countryOfTeam . 
+   ?countryOfBirth a dbo:Country ; dbo:populationTotal ?population .
+   ?countryOfTeam a dbo:Country .
+FILTER (?countryOfTeam != ?countryOfBirth)
+FILTER (?stadiumcapacity > 30000)
+FILTER (?population > 10000000)
+    }
+} order by ?soccerplayer
