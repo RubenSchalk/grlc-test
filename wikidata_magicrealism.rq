@@ -28,4 +28,4 @@ SELECT DISTINCT ?author ?author_name ?worldcat_id ?worldcat_url WHERE {
     BIND(IRI(concat("https://www.worldcat.org/identities/", ?worldcat_id)) as ?worldcat_url)
    }
   
- } LIMIT 10000
+ } 
