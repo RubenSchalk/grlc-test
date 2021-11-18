@@ -1,0 +1,31 @@
+
+#+ summary: Find all authors who are attributed to the genre magic realism in novels
+#+ method: GET
+#+ pagination: 1000
+#+ endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bib: <http://id.loc.gov/ontologies/bibframe/>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX schema: <http://schema.org/>
+
+
+SELECT DISTINCT ?author ?author_name ?worldcat_id ?worldcat_url WHERE {
+
+  service <https://query.wikidata.org/bigdata/namespace/wdq/sparql> {
+    
+    ?werken wdt:P136 wd:Q102439494 .
+    ?werken wdt:P31 wd:Q8261 . 
+    ?werken wdt:P50 ?author .
+    optional { ?author rdfs:label ?author_name .}
+    ?author wdt:P7859 ?worldcat_id .
+    FILTER(lang(?author_name) = 'en')
+    
+    BIND(IRI(concat("https://www.worldcat.org/identities/", ?worldcat_id)) as ?worldcat_url)
+   }
+  
+ } LIMIT 10000
