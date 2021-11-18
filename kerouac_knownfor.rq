@@ -1,0 +1,40 @@
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+#+ summary: Fetch actor information from wikidate 
+#+ endpoint: https://api.druid.datalegend.net/datasets/RubenS/kerouac-vde/services/kerouac-vde/sparql
+
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bib: <http://id.loc.gov/ontologies/bibframe/>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX schema: <http://schema.org/>
+
+SELECT DISTINCT ?worldcat_author ?label ?birth_name ?notable_titles ?year_publication ?movement_name ?movement WHERE {
+   
+  ?worldcat_author a bib:Agent .
+  ?worldcat_author   rdfs:label ?label .
+  ?worldcat_author  owl:sameAs wd:Q160534
+
+  FILTER(?label = "Kerouac, Jack,1922-1969.")
+ 
+service <https://query.wikidata.org/bigdata/namespace/wdq/sparql> {
+   
+   wd:Q160534 wdt:P1477 ?birth_name ;     
+              wdt:P800 ?notable_work ;
+              wdt:P135 ?movement .
+    ?movement rdfs:label ?movement_name .
+    
+        
+    ?notable_work rdfs:label ?notable_titles .
+    ?notable_work wdt:P571 ?date_publication .
+    FILTER(lang(?notable_titles) = 'en')
+   FILTER(lang(?movement_name) = 'en')
+   BIND((YEAR(?date_publication)) as ?year_publication) 
+    
+     
+    
+   
+    
+  }
