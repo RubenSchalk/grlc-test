@@ -1,7 +1,8 @@
+
+#- endpoint: https://api.lod.uba.uva.nl/datasets/UB-UVA/Catalogue/services/virtuoso/sparql
 #+ description: Retrieves number of works in collection by year and type
 #+     lod
 #+     uva
-#+     - endpoint: https://api.lod.uba.uva.nl/datasets/UB-UVA/Catalogue/services/virtuoso/sparql
 
 #+ description: Retrieves number of works in collection by year and type
 #+     lod
