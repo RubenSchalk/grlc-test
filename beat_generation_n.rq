@@ -1,0 +1,29 @@
+#+ summary: Overview of unique literary works published by Beat Generation authors, by year
+#+ endpoint: https://api.druid.datalegend.net/datasets/RubenS/kerouac-vde/services/kerouac-vde/sparql
+
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bib: <http://id.loc.gov/ontologies/bibframe/>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX schema: <http://schema.org/>
+
+
+SELECT ?pub_year (count(distinct(?work)) as ?n) WHERE {
+
+  service <https://query.wikidata.org/bigdata/namespace/wdq/sparql> {
+    
+    ?author wdt:P135 wd:Q213457 . # author is part of the Beat Generation literary movement
+    ?work wdt:P50 ?author .  # give me the works by these authors.
+    ?work wdt:P31 wd:Q7725634 . # these works are classified as literary work 
+    ?work wdt:P577 ?publication_date .
+    
+    BIND(YEAR(?publication_date) as ?pub_year)
+    
+    
+       }
+  
+ } 
+ORDER BY ASC (?pub_year)
