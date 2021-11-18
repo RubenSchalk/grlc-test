@@ -1,7 +1,5 @@
 
 #+ summary: Find all authors who are attributed to the genre magic realism in novels
-#+ method: GET
-#+ pagination: 1000
 #+ endpoint: https://api.druid.datalegend.net/datasets/RubenS/kerouac-vde/services/kerouac-vde/sparql
 
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
@@ -18,14 +16,15 @@ SELECT DISTINCT ?author ?author_name ?worldcat_id ?worldcat_url WHERE {
 
   service <https://query.wikidata.org/bigdata/namespace/wdq/sparql> {
     
-    ?werken wdt:P136 wd:Q102439494 .
-    ?werken wdt:P31 wd:Q8261 . 
-    ?werken wdt:P50 ?author .
+    ?werken wdt:P136 wd:Q102439494 . # work in the genre of magic realist fiction (can be ANY work)
+    ?werken wdt:P31 wd:Q8261 .  # work is an instance of a novel (but this can also be a movie/ art etc.!)
+    ?werken wdt:P50 ?author .  # novel has this author
+  
     optional { ?author rdfs:label ?author_name .}
-    ?author wdt:P7859 ?worldcat_id .
+    ?author wdt:P7859 ?worldcat_id . # author has this worldcat ID
     FILTER(lang(?author_name) = 'en')
     
-    BIND(IRI(concat("https://www.worldcat.org/identities/", ?worldcat_id)) as ?worldcat_url)
+    BIND(IRI(concat("https://www.worldcat.org/identities/", ?worldcat_id)) as ?worldcat_url) # worldcat ID into a URL
    }
   
  } 
