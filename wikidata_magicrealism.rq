@@ -2,7 +2,7 @@
 #+ summary: Find all authors who are attributed to the genre magic realism in novels
 #+ method: GET
 #+ pagination: 1000
-#+ endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+#+ endpoint: https://api.druid.datalegend.net/datasets/RubenS/kerouac-vde/services/kerouac-vde/sparql
 
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
