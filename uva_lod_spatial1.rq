@@ -1,6 +1,7 @@
-#+ endpoint: https://api.lod.uba.uva.nl/datasets/UB-UVA/Catalogue/services/virtuoso/sparql
+
 #+ description: Connects placenames on maps collection UvA to Gemeentegeschiedenis polygons
 #+     Note: nested query with counts and legend does not work because of server timeout (due to the memory intensive label matching)
+#+ endpoint: https://api.lod.uba.uva.nl/datasets/UB-UVA/Catalogue/services/virtuoso/sparql
  
 
 PREFIX geo: <http://www.opengis.net/ont/geosparql#>
