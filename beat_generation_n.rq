@@ -17,7 +17,6 @@ SELECT ?pub_year (count(distinct(?work)) as ?n) WHERE {
     
     ?author wdt:P135 wd:Q213457 . # author is part of the Beat Generation literary movement
     ?work wdt:P50 ?author .  # give me the works by these authors.
-    ?work wdt:P31 wd:Q7725634 . # these works are classified as literary work 
     ?work wdt:P577 ?publication_date .
     
     BIND(YEAR(?publication_date) as ?pub_year)
