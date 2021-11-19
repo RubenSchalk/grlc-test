@@ -1,4 +1,5 @@
 #+ endpoint: https://api.druid.datalegend.net/datasets/RubenS/kerouac-vde/services/kerouac-vde/sparql
+#+ description: contextualize author information by looking up authors and books associated with the same literary movement
 
 PREFIX dbp: <http://dbpedia.org/property/>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -20,25 +21,30 @@ PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 
 SELECT DISTINCT ?worldcat_label ?beat_generation ?beat_works ?wikidata_work WHERE {
   
+  # we start in our 'virtual' worldcat catalogue as linked data
+  
   ?worldcat_author a bib:Agent .
-  ?worldcat_author   rdfs:label ?worldcat_label .
-  ?worldcat_author  owl:sameAs wd:Q160534 # retrieve wikidata Entity code from AUTHOR AUTHORITY FIELD 
-
-  FILTER(?worldcat_label = "Kerouac, Jack,1922-1969.")
+  ?worldcat_author rdfs:label ?worldcat_label .
+  
+  FILTER(?worldcat_label = "Kerouac, Jack,1922-1969.") # we search on the name of an author (this will be a search bar in the future!)
  
-service <https://dbpedia.org/sparql> { # take our query to another linked data store: DBpedia
-
-  ?dbpedia_author  owl:sameAs wd:Q160534 . # use wikidata Entity code to access author information in DBpedia!
+  ?worldcat_author owl:sameAs wd:Q160534 # Wikidata entity code already provided in OCLC author authority file 
+                    
+service <https://dbpedia.org/sparql> {
+    
+  # we now take the Wikidata code of Kerouac from Worldcat to another linked data store (DBpedia), to contextualize our search:
+    
+  ?dbpedia_author  owl:sameAs wd:Q160534 . # use Wikidata code to access author information in DBpedia!
   ?dbpedia_author dbo:notableWork ?notable_work . # retrieve notable works from Kerouac
-  ?notable_work dbo:literaryGenre ?genre. # use those works to find the literary genre
-  FILTER(?genre != <http://dbpedia.org/resource/Novel>) # (remove 'novel' from genre category to clean results)
-  ?genre dbo:wikiPageWikiLink ?beat_generation_output . # give me all things associated with the beat generation
-  ?beat_generation_output dbo:notableWork ?beat_works . # now give me the notable works from those things
-  ?beat_works rdf:type ?beat_work_type  # retrieve the type of these works (books, movies, poems, etc.)
+  ?notable_work dbo:literaryGenre ?genre. # use those works to find their genre
+  FILTER(?genre != <http://dbpedia.org/resource/Novel>) # remove 'novel' from genre category to clean results
+  ?genre dbo:wikiPageWikiLink ?beat_generation . # give me all things associated with the beat generation
+  ?beat_generation dbo:notableWork ?beat_works . # now give me the notable works from those things
+  ?beat_works rdf:type ?beat_work_type  # call the type of work
    
-    VALUES ?beat_work_type { dbo:Book } # filter the works on books
-    ?beat_works owl:sameAs ?wikidata_work . # give me the link to these works in wikidata
-    FILTER(REGEX(?wikidata_work, "wikidata"))
+   VALUES ?beat_work_type { dbo:Book } # filter the works to books 
+   ?beat_works owl:sameAs ?wikidata_work . # give me the link to these works in wikidata, to look them up in this triple store (next query...)
+   FILTER(REGEX(?wikidata_work, "wikidata"))
     
     }
 } ORDER BY ?beat_generation
