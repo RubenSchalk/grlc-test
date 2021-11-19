@@ -26,7 +26,7 @@ service <https://dbpedia.org/sparql> {
   ?beat_generation dbo:notableWork ?beat_works .
   ?beat_works rdf:type ?beat_work_type .
     
-    VALUES ?beat_work_type { schema:Book }
+    VALUES ?beat_work_type { dbo:Book }
     
     }
 } 
