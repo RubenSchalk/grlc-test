@@ -1,6 +1,5 @@
 #+ endpoint: https://api.druid.datalegend.net/datasets/RubenS/kerouac-vde/services/kerouac-vde/sparql
-#+
-
+#+ 
 
 PREFIX dbp: <http://dbpedia.org/property/>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -13,23 +12,21 @@ PREFIX dbo: <http://dbpedia.org/ontology/>
 PREFIX dbpedia2: <http://dbpedia.org/property/>
 PREFIX dbpedia: <http://dbpedia.org/>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wd: <http://www.wikidata.org/>
+PREFIX schema: <http://schema.org/>
 
 SELECT distinct * WHERE {
   
-  
-  
+    
 service <https://dbpedia.org/sparql> {
 
     
  <http://dbpedia.org/resource/On_the_Road> dbo:literaryGenre ?genre .
- ?genre dbo:wikiPageWikiLink ?associated_with .
-    ?associated_with dbp:occupation ?occ .
-   FILTER(?occ = "novelist"@en || ?occ = "Writer"@en ).  
-
-     ?beat_works dbo:author ?associated_with.
+ ?genre dbo:wikiPageWikiLink ?beat_generation .
+  ?beat_generation dbo:notableWork ?beat_works .
+  ?beat_works rdf:type ?beat_work_type .
     
-    
+    VALUES ?beat_work_type { schema:Book }
     
     }
 } 
