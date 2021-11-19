@@ -1,0 +1,32 @@
+#+ summary: Overview of works by the beat generation, with Worldcat links if available
+#+ endpoint: https://api.druid.datalegend.net/datasets/RubenS/kerouac-vde/services/kerouac-vde/sparql
+
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bib: <http://id.loc.gov/ontologies/bibframe/>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX schema: <http://schema.org/>
+
+
+SELECT ?wikidata_work ?author_name  ?work_title ?worldcat_url WHERE {
+
+  service <https://query.wikidata.org/bigdata/namespace/wdq/sparql> {
+    
+    ?wikidata_work wdt:P50 ?author .  # give me the works by the authors we retrieved from DBpedia 
+    ?author wdt:P135 wd:Q213457 . # author is part of the Beat Generation literary movement
+    ?author rdfs:label ?author_name . # give me the names of the authors
+    ?wikidata_work rdfs:label ?work_title . # give me the title
+    optional{ ?wikidata_work wdt:P243 ?worldcat_id .} # give me the worldcat item number if present in wikidata
+   
+    FILTER(lang(?work_title) = 'en') # give me only the title in English
+    FILTER(lang(?author_name) = 'en') # give me only the title in English
+   BIND(IRI(concat("https://www.worldcat.org/oclc/", ?worldcat_id)) as ?worldcat_url) # worldcat ID into a URL
+    
+    
+       }
+  
+ } 
+ORDER BY DESC (?worldcat_url)
