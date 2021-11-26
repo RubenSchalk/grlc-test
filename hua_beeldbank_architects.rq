@@ -1,0 +1,31 @@
+#+ endpoint: https://api.data.netwerkdigitaalerfgoed.nl/datasets/hetutrechtsarchief/Beeldbank/services/Beeldbank/sparql
+
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX edm: <http://www.europeana.eu/schemas/edm/>
+PREFIX sem: <http://semanticweb.cs.vu.nl/2009/11/sem/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT  ?station ?architect ?name ?widget WHERE {
+  SERVICE <https://query.wikidata.org/sparql> {
+    ?station wdt:P31 wd:Q55488 . 
+  	?station wdt:P84 ?architect .
+    ?architect rdfs:label ?name .
+    FILTER(lang(?name) = 'en') 
+  }
+  ?cho dct:spatial ?station .
+  ?cho edm:isShownBy ?img .
+  ?cho dc:description ?description .
+  ?cho sem:hasBeginTimeStamp ?chodate .
+  FILTER (?chodate > '1948-12-05'^^xsd:date)
+  BIND(strdt(CONCAT(
+      '<a href="',?cho,'"><img style="height:170px;" src="',?img,'"></a>',
+      ?description,'<br />',' foto van ',?chodate, '. Architect railwaystation = ',?name
+      ),rdf:HTML) AS ?widget)
+} 
+ORDER BY ?chodate
+LIMIT 50
