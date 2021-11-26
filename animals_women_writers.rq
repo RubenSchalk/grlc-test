@@ -1,0 +1,34 @@
+#- endpoint: https://api.data.netwerkdigitaalerfgoed.nl/datasets/enno/verrijken-en-verbinden/services/verrijken-en-verbinden/sparql
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX schema: <http://schema.org/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+select ?label (count(?s) as ?n)  where {
+  service <http://data.bibliotheken.nl/sparql> {
+    # 1. is een boek:
+    ?s a schema:Book .
+
+    # 2. over dieren:
+    ?s schema:about/skos:broader* <http://data.bibliotheken.nl/id/thes/p075635178> .
+
+    # 3. door een vrouw:
+    ?s schema:author/owl:sameAs/schema:gender <http://schema.org/Female> .
+
+    # 4. alleen de 'dieren'-onderwerpen
+    ?s schema:about ?onderwerp .
+    ?onderwerp skos:broader+ <http://data.bibliotheken.nl/id/thes/p075635178> .
+
+    # 5. we willen het label zien
+    ?onderwerp skos:prefLabel ?label .
+
+    # 6. enkel pubs uit jaren '80:
+    ?s schema:publication/schema:startDate ?jaar .
+   # BIND(YEAR((?jaar)) as ?jaar2)
+  #  FILTER(?jaar >= '1979'^^xsd:gYear) .
+FILTER(?jaar > "1979"^^<http://www.w3.org/2001/XMLSchema#integer>) 
+  }
+
+} order by desc(?n)
+LIMIT 10
