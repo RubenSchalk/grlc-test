@@ -22,7 +22,7 @@ SELECT ?wikidata_work ?author_name  ?work_title ?worldcat_url WHERE {
     optional{ ?wikidata_work wdt:P243 ?worldcat_id .} # give me the worldcat item number if present in wikidata
    
     FILTER(lang(?work_title) = 'en') # give me only the title in English
-    FILTER(lang(?author_name) = 'en') # give me only the title in English
+    FILTER(lang(?author_name) = 'en') # give me only the author in English
    BIND(IRI(concat("https://www.worldcat.org/oclc/", ?worldcat_id)) as ?worldcat_url) # worldcat ID into a URL
     
     
