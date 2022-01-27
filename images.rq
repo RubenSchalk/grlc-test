@@ -1,0 +1,37 @@
+# -endpoint: https://api.druid.datalegend.net/datasets/RubenS/test4/services/test4/sparql
+
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX uu: <https://data.universiteitsbibliotheekutrecht/someren/vocab/>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+SELECT DISTINCT ?widget ?image ?title ?uulink ?person ?creator (max(?birth) as ?maxb) WHERE {
+  
+  ?sub dct:title ?title .
+  ?sub uu:uuLink ?uulink.
+  ?sub dct:creator ?creator .
+  ?creator skos:label ?label .
+  ?sub dct:date ?date_pub .
+  ?creator uu:viafLink ?viaf .
+  
+  BIND(STR(STRAFTER(STR(?viaf), "org/viaf/")) as ?viaf_string)
+    
+service <https://query.wikidata.org/bigdata/namespace/wdq/sparql> {
+    
+?person wdt:P214 ?viaf_string .  
+ ?person wdt:P569 ?birth .
+      ?person wdt:P18 ?image .
+    
+      }   
+   BIND('''
+    <h4><p>Pamflet: <a href="{{uulink}}" target="blank">{{title}}</a></p></h4>
+    <a href="{{person}}" target="blank"><img src="{{image}}" style="max-width:280px;"></a>
+	 <p>Wikidata author: <a href="{{person}}" target="blank">{{person}}</a></p>
+     <p>Geboortedatum: <a href="{{maxb}}" target="blank">{{maxb}}</a></p>
+    '''^^rdf:HTML as ?widget)
+  
+} LIMIT 50
