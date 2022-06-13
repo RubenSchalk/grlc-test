@@ -18,9 +18,13 @@ PREFIX bib: <http://id.loc.gov/ontologies/bibframe/>
 PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 
-SELECT DISTINCT ?pred WHERE {
+SELECT DISTINCT ?municpality ?pred ?obj WHERE {
  
-  <http://dbpedia.org/resource/Utrecht_(province)> ?pred ?obj. 
+  
+  ?municpality dbp:subdivisionName <http://dbpedia.org/resource/Utrecht_(province)> . 
+  ?municpality ?pred ?obj .
+   
+ FILTER regex(?municpality, "Driebergen", "i") 
    
   
 } 
