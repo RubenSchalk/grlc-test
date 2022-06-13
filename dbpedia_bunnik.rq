@@ -20,9 +20,7 @@ PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 
 SELECT DISTINCT ?pred WHERE {
  
-service <https://dbpedia.org/sparql> {
-    
   <http://dbpedia.org/resource/Bunnik> ?pred ?obj. 
-    }
+   
   
 } 
