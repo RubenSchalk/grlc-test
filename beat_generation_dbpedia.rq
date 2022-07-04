@@ -1,4 +1,4 @@
-#+ endpoint: https://api.druid.datalegend.net/datasets/RubenS/kerouac-vde/services/kerouac-vde/sparql
+#+ endpoint: https://api.uu.triply.cc/datasets/ubu/kerouac/services/kerouac/sparql
 #+ description: contextualize author information by looking up authors and books associated with the same literary movement
 
 PREFIX dbp: <http://dbpedia.org/property/>
