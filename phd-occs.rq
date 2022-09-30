@@ -1,0 +1,25 @@
+#- endpoint: https://api.uu.triply.cc/datasets/ubu/Album-promotorum-uu/services/Album-promotorum-uu/sparql
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX bio: <http://purl.org/vocab/bio/0.1/>
+PREFIX dapvocab: <https://ubu.dataset/dap/vocab/>
+PREFIX dap: <https://ubu.dataset/dap/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dap: <https://ubu.dataset/dap/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+SELECT ?phd ?name ?occlabel WHERE {
+  
+    ?phd a dap:phdStudent .
+  	?phd rdfs:label ?name .
+    ?phd owl:sameAs ?wikidatalink .
+  
+SERVICE <https://query.wikidata.org/bigdata/namespace/wdq/sparql> {
+    
+   ?wikidatalink  wdt:P106 ?occ . 
+   ?occ rdfs:label ?occlabel .
+   FILTER(LANG(?occlabel) = "en")
+    
+  }
+} 
