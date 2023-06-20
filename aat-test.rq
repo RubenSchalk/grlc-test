@@ -1,4 +1,4 @@
-# endpoint: http://vocab.getty.edu/sparql
+#- endpoint: http://vocab.getty.edu/sparql
 
 PREFIX gtv: <http://vocab.getty.edu/ontology#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
