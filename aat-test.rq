@@ -1,0 +1,18 @@
+# endpoint: http://vocab.getty.edu/sparql
+
+PREFIX gtv: <http://vocab.getty.edu/ontology#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT * WHERE {
+
+  
+  ?term a gtv:Concept .
+  ?term skos:closeMatch ?obj .
+  
+#  bind(if(REGEX(?pred, "Match"), 1, 0) as ?external_links_in_thesaurus)
+ # FILTER(?external_links_in_thesaurus = "1"^^<http://www.w3.org/2001/XMLSchema#int> )
+} 
+LIMIT 10
