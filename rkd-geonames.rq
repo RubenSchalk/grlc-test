@@ -1,0 +1,26 @@
+#+ endpoint: https://api.data.netwerkdigitaalerfgoed.nl/datasets/rkd/rkdartists/services/rkdartists/sparql
+
+PREFIX wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX schema: <http://schema.org/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT *  WHERE {
+  
+?plaats a <http://data.rkd.nl/def#Place_of_Activity> .
+?plaats schema:latitude ?lat .
+?plaats schema:longitude ?lon .
+
+  #  BIND(STRDT(CONCAT("POINT(",str(?lon), " ", str(?lat), ")"),geo:wktLiteral) as ?coordinates)
+ 
+  SERVICE <https://demo.netwerkdigitaalerfgoed.nl/geonames/sparql> {
+     
+    ?sub wgs84:latitude ?lat .
+    ?sub wgs84:longitude ?lon .
+    
+    
+  }
+  LIMIT 10
