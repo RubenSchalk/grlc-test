@@ -23,4 +23,4 @@ SELECT *  WHERE {
     
     
   }
-  }  LIMIT 10
+  }  LIMIT 1
